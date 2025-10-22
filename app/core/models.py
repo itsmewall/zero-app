@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import JSON
 from ..extensions import db
 
 class Project(db.Model):
@@ -24,6 +24,6 @@ class Task(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"))
     title = db.Column(db.String(200), nullable=False)
     state_id = db.Column(db.Integer, db.ForeignKey("workflow_states.id"), nullable=False)
-    data = db.Column(JSONB, default=dict)
+    data = db.Column(JSON, default=dict)
     due_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

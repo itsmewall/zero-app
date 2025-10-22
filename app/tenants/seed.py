@@ -1,5 +1,5 @@
 import yaml
-from passlib.hash import bcrypt
+from werkzeug.security import generate_password_hash
 from .models import Tenant, User
 from ..core.models import WorkflowState
 from ..extensions import db
@@ -7,7 +7,11 @@ from ..extensions import db
 def seed_tenant(slug, blueprint_file):
     t = Tenant(slug=slug, blueprint=blueprint_file, is_active=True)
     db.session.add(t); db.session.flush()
-    db.session.add(User(email=f"owner@{slug}.io", password_hash=bcrypt.hash("admin"), role="owner", tenant_id=t.id))
+    db.session.add(User(
+        email=f"owner@{slug}.io",
+        password_hash=generate_password_hash("admin", method="pbkdf2:sha256", salt_length=16),
+        role="owner",
+        tenant_id=t.id))
     data = yaml.safe_load(open(f"app/blueprints/{blueprint_file}", "r", encoding="utf8"))
     states = data["workflows"]["Task"]["states"]
     for i, name in enumerate(states):

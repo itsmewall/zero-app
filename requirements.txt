@@ -6,7 +6,6 @@ alembic==1.13.2
 marshmallow==3.22.0
 flask-smorest==0.44.0
 flask-jwt-extended==4.6.0
-passlib[bcrypt]==1.7.4
 python-dotenv==1.0.1
 PyYAML==6.0.2
 celery==5.4.0

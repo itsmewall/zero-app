@@ -1,12 +1,20 @@
 name: Restaurante
 entities:
   Task:
-    labels: { singular: "Tarefa", plural: "Tarefas" }
+    labels:
+      singular: "Tarefa"
+      plural: "Tarefas"
     fields:
-      - key: mesa; type: string
-      - key: prato; type: string
-      - key: prioridade; type: enum; choices: [baixa, media, alta]; default: media
+      - key: mesa
+        type: string
+        required: false
+      - key: prato
+        type: string
+      - key: prioridade
+        type: enum
+        choices: [baixa, media, alta]
+        default: media
 workflows:
   Task:
-    states: [Aberta, Em preparo, Pronta, Entregue]
+    states: [Aberta, "Em preparo", Pronta, Entregue]
     initial: Aberta
