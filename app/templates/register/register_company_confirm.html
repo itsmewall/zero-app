@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/register_wizard.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="wizard">
+  <div class="stepper">
+    <div class="step done">Seus dados</div>
+    <div class="step done">Empresa</div>
+    <div class="step active">Revisar</div>
+  </div>
+
+  <div class="panel">
+    <h2>Revisar e confirmar</h2>
+    <div class="review">
+      <dl>
+        <dt>Nome</dt><dd>{{ reg.user.first_name }} {{ reg.user.last_name }}</dd>
+        <dt>E-mail</dt><dd>{{ reg.user.email }}</dd>
+        <dt>Cargo</dt><dd>{{ reg.user.job_title or "N informado" }}</dd>
+        <dt>Fuso do usuário</dt><dd>{{ reg.user.tz }}</dd>
+      </dl>
+      <dl>
+        <dt>Empresa</dt><dd>{{ reg.company.trade_name or reg.company.legal_name }}</dd>
+        <dt>Documento</dt><dd>{{ reg.company.tax_id or "N informado" }}</dd>
+        <dt>País</dt><dd>{{ reg.company.country }}</dd>
+        <dt>Fuso da empresa</dt><dd>{{ reg.company.tz }}</dd>
+      </dl>
+    </div>
+
+    <form method="post" novalidate style="margin-top:.8rem;">
+      {{ form.hidden_tag() }}
+      <div class="terms">
+        {{ form.accept_terms(id="accept_terms") }}
+        <label for="accept_terms">Li e concordo com os <a href="{{ url_for('web_auth.terms') }}" target="_blank">Termos de Uso</a>.</label>
+      </div>
+      {% for e in form.accept_terms.errors %}<small class="error">{{ e }}</small>{% endfor %}
+      <div class="actions">
+        {{ form.submit(class_="contrast") }}
+        <a class="secondary" href="{{ url_for('web_auth.register_company_step2') }}">Voltar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

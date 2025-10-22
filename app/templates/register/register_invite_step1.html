@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/register_wizard.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="wizard">
+  <div class="stepper">
+    <div class="step active">Convite</div>
+    <div class="step">Seu perfil</div>
+    <div class="step">Concluir</div>
+  </div>
+
+  <div class="panel">
+    <h2>Informe o token do convite</h2>
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <label>Token {{ form.token(placeholder="cole aqui o token recebido") }}</label>
+      {% for e in form.token.errors %}<small class="error">{{ e }}</small>{% endfor %}
+      <div class="actions">
+        {{ form.submit(class_="contrast") }}
+        <a class="secondary" href="{{ url_for('web_auth.register_mode') }}">Voltar</a>
+      </div>
+    </form>
+    <p style="margin-top:.6rem;">Se você clicou em um link, o token pode vir preenchido automaticamente.</p>
+  </div>
+</div>
+{% endblock %}

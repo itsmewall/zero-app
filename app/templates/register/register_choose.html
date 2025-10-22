@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/register_wizard.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="wizard">
+  <div class="stepper">
+    <div class="step active">Escolha</div>
+    <div class="step">Etapas</div>
+    <div class="step">Concluir</div>
+  </div>
+
+  <div class="panel">
+    <h2>Como deseja começar?</h2>
+    <p>Você pode criar uma empresa nova ou entrar em uma empresa existente usando um convite.</p>
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <label>Opção {{ form.mode() }}</label>
+      <div class="actions">
+        {{ form.submit(class_="contrast") }}
+      </div>
+    </form>
+    <p style="margin-top:.6rem;">Já tem um link de convite? Selecione Entrar com convite.</p>
+  </div>
+</div>
+{% endblock %}

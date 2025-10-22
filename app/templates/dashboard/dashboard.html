@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-head">
+  <h2>Dashboard</h2>
+  {% if company %}
+    <div class="company">
+      Empresa: <strong>{{ company.trade_name or company.legal_name }}</strong> • plano {{ company.plan }}
+    </div>
+  {% else %}
+    <div class="company">Sem empresa vinculada</div>
+  {% endif %}
+</div>
+
+<!-- KPIs principais -->
+<div class="kpis">
+  <div class="kpi">
+    <div class="label">Usuários</div>
+    <div class="value">
+      {% if users_count is defined %}{{ users_count }}{% else %}1{% endif %}
+    </div>
+  </div>
+  <div class="kpi">
+    <div class="label">Projetos</div>
+    <div class="value">
+      {% if projects_count is defined %}{{ projects_count }}{% else %}0{% endif %}
+    </div>
+  </div>
+  <div class="kpi">
+    <div class="label">Convites pendentes</div>
+    <div class="value">
+      {% if pending_invites is defined %}{{ pending_invites|length }}{% else %}0{% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Ações rápidas -->
+<div class="section">
+  <header>
+    <h3>Ações rápidas</h3>
+    <nav>
+      {% if company %}<a href="{{ url_for('web_auth.invites') }}">Convites</a>{% endif %}
+      <a href="#">Configurações</a>
+    </nav>
+  </header>
+  <div class="grid">
+    {% if company %}
+    <article class="card">
+      <header><strong>Convidar equipe</strong></header>
+      <p>Crie convites para novos membros entrarem na sua empresa.</p>
+      <footer><a href="{{ url_for('web_auth.invites') }}">Abrir convites</a></footer>
+    </article>
+    {% endif %}
+
+    <article class="card">
+      <header><strong>Meu perfil</strong></header>
+      <p>Atualize nome, fuso e idioma.</p>
+      <footer><a href="#">Abrir perfil</a></footer>
+    </article>
+
+    <article class="card">
+      <header><strong>Sair</strong></header>
+      <p>Encerrar sessão deste dispositivo.</p>
+      <footer><a href="{{ url_for('web_auth.logout') }}">Logout</a></footer>
+    </article>
+  </div>
+</div>
+
+<!-- Equipe -->
+<div class="section" style="margin-top:1rem;">
+  <header><h3>Equipe</h3></header>
+  {% set team_safe = team if team is defined else [] %}
+  {% if team_safe %}
+    <div class="grid">
+      {% for m in team_safe %}
+      <article class="card">
+        <header><strong>{{ m.user.first_name }} {{ m.user.last_name }}</strong></header>
+        <p>
+          {{ m.user.email }}<br>
+          Papel: {{ m.role }}{% if m.user.job_title %} • {{ m.user.job_title }}{% endif %}
+        </p>
+        <footer><small>Desde {{ m.joined_at.strftime('%d/%m/%Y') if m.joined_at else 'N/D' }}</small></footer>
+      </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Nenhum membro listado. {% if company %}Use a página de convites para adicionar sua equipe.{% endif %}</p>
+  {% endif %}
+</div>
+
+<!-- Convites pendentes -->
+<div class="section" style="margin-top:1rem;">
+  <header><h3>Convites pendentes</h3></header>
+  {% if pending_invites is defined and pending_invites %}
+    <div class="grid">
+      {% for i in pending_invites %}
+      <article class="card">
+        <header><strong>{{ i.email }}</strong></header>
+        <p>Papel: {{ i.role }}<br>Expira em: {{ i.expires_at }}</p>
+        <p>Link: <code>{{ url_for('web_auth.accept_invite', token=i.token, _external=True) }}</code></p>
+        <footer><a href="{{ url_for('web_auth.invites') }}">Gerenciar convites</a></footer>
+      </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Nenhum convite pendente.</p>
+  {% endif %}
+</div>
+
+<!-- Status do sistema -->
+<div class="section" style="margin-top:1rem;">
+  <header><h3>Status</h3></header>
+  <div class="grid">
+    <article class="card">
+      <header><strong>Aplicação</strong></header>
+      <p>OK</p>
+    </article>
+    <article class="card">
+      <header><strong>Usuário logado</strong></header>
+      <p>{{ current_user.first_name or current_user.email }}</p>
+    </article>
+    <article class="card">
+      <header><strong>Empresa ativa</strong></header>
+      <p>{{ company.trade_name or company.legal_name if company else 'Nenhuma' }}</p>
+    </article>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="dashboard-head">
+  <h2>Convites</h2>
+  {% if company %}
+    <div class="company">Empresa: <strong>{{ company.trade_name or company.legal_name }}</strong></div>
+  {% endif %}
+</div>
+
+<section class="section">
+  <header><h3>Novo convite</h3></header>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="grid">
+      <label>E-mail {{ form.email() }}</label>
+      <label>Papel {{ form.role() }}</label>
+      <label>Validade (dias) {{ form.days_valid() }}</label>
+    </div>
+    <div class="form-actions">
+      {{ form.submit(class_="contrast") }}
+    </div>
+  </form>
+</section>
+
+<section class="section" style="margin-top:1rem;">
+  <header><h3>Pendentes</h3></header>
+  {% if pending %}
+    <div class="grid">
+      {% for i in pending %}
+      <article class="card">
+        <header><strong>{{ i.email }}</strong></header>
+        <p>Papel: {{ i.role }}<br>Expira em: {{ i.expires_at }}</p>
+        <p>Link: <code>{{ url_for('web_auth.accept_invite', token=i.token, _external=True) }}</code></p>
+        <form method="post" action="{{ url_for('web_auth.revoke_invite', invite_id=i.id) }}">
+          <button class="secondary" type="submit">Revogar</button>
+        </form>
+      </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Nenhum convite pendente.</p>
+  {% endif %}
+</section>
+
+<section class="section" style="margin-top:1rem;">
+  <header><h3>Últimos usados</h3></header>
+  {% if used %}
+    <ul>
+      {% for i in used %}
+        <li>{{ i.email }} aceitou em {{ i.accepted_at }} como {{ i.role }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhum ainda.</p>
+  {% endif %}
+</section>
+{% endblock %}

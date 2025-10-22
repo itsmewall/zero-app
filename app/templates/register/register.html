@@ -72,10 +72,13 @@
         </fieldset>
       </div>
 
-      <label class="terms">
-        {{ form.accept_terms(id="accept_terms") }} Aceito os termos
-      </label>
-      {% for e in form.accept_terms.errors %}<small class="error">{{ e }}</small>{% endfor %}
+        <div class="terms">
+        {{ form.accept_terms(id="accept_terms") }}
+            <label for="accept_terms">
+                Li e concordo com os <a href="{{ url_for('web_auth.terms') }}" target="_blank">Termos de Uso</a>.
+            </label>
+        </div>
+        {% for e in form.accept_terms.errors %}<small class="error">{{ e }}</small>{% endfor %}
 
       <div class="form-footer">
         {{ form.submit(class_="contrast") }}

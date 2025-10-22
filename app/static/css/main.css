@@ -87,3 +87,7 @@ input:focus, select:focus {
 button, [role="button"], input[type="submit"] {
   border-radius: 8px;
 }
+
+.terms { display:flex; align-items:center; gap:.5rem; margin-top:.5rem; }
+.terms input[type="checkbox"] { inline-size:auto; block-size:auto; }
+.terms label { cursor:pointer; }

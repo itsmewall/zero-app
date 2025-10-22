@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="page-login">
+  <div class="login-box">
+    <h2>Aceitar convite</h2>
+    <p class="subtitle">
+      Convite para <strong>{{ invite.email }}</strong> entrar em
+      <strong>{{ invite.company.trade_name or invite.company.legal_name }}</strong> como <strong>{{ invite.role }}</strong>.
+    </p>
+
+    <p>Não tem conta ainda para este e-mail. Crie sua conta abaixo e entraremos você na empresa automaticamente.</p>
+
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+
+      <label>Nome {{ form.first_name() }}</label>
+      {% for e in form.first_name.errors %}<small class="error">{{ e }}</small>{% endfor %}
+
+      <label>Sobrenome {{ form.last_name() }}</label>
+      {% for e in form.last_name.errors %}<small class="error">{{ e }}</small>{% endfor %}
+
+      <label>Senha {{ form.password() }}</label>
+      {% for e in form.password.errors %}<small class="error">{{ e }}</small>{% endfor %}
+
+      <label>Confirmar senha {{ form.confirm() }}</label>
+      {% for e in form.confirm.errors %}<small class="error">{{ e }}</small>{% endfor %}
+
+      <div class="login-actions">
+        {{ form.submit(class_="contrast") }}
+        <a href="{{ url_for('web_auth.login', next=url_for('web_auth.accept_invite', token=invite.token)) }}">Já tenho conta</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/register_wizard.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="wizard">
+  <div class="stepper">
+    <div class="step active">Seus dados</div>
+    <div class="step">Empresa</div>
+    <div class="step">Revisar</div>
+  </div>
+
+  <div class="panel">
+    <h2>Seus dados</h2>
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="row">
+        <label>Nome {{ form.first_name() }} {% for e in form.first_name.errors %}<small class="error">{{ e }}</small>{% endfor %}</label>
+        <label>Sobrenome {{ form.last_name() }} {% for e in form.last_name.errors %}<small class="error">{{ e }}</small>{% endfor %}</label>
+      </div>
+      <div class="row">
+        <label>E-mail {{ form.email(placeholder="voce@exemplo.com") }} {% for e in form.email.errors %}<small class="error">{{ e }}</small>{% endfor %}</label>
+        <label>Telefone {{ form.phone(placeholder="+55 61 99999-9999") }} {% for e in form.phone.errors %}<small class="error">{{ e }}</small>{% endfor %}</label>
+      </div>
+      <div class="row">
+        <label>Senha {{ form.password(placeholder="mínimo 6 caracteres") }} {% for e in form.password.errors %}<small class="error">{{ e }}</small>{% endfor %}</label>
+        <label>Confirmar {{ form.confirm() }} {% for e in form.confirm.errors %}<small class="error">{{ e }}</small>{% endfor %}</label>
+      </div>
+      <div class="row">
+        <label>Cargo {{ form.job_title() }}</label>
+        <label>Seu fuso horário {{ form.tz() }}</label>
+      </div>
+      <div class="actions">
+        {{ form.submit(class_="contrast") }}
+        <a class="secondary" href="{{ url_for('web_auth.register_mode') }}">Voltar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

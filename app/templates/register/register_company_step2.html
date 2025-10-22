@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/register_wizard.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="wizard">
+  <div class="stepper">
+    <div class="step done">Seus dados</div>
+    <div class="step active">Empresa</div>
+    <div class="step">Revisar</div>
+  </div>
+
+  <div class="panel">
+    <h2>Dados da empresa</h2>
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <label>Nome da empresa {{ form.company_legal_name() }} {% for e in form.company_legal_name.errors %}<small class="error">{{ e }}</small>{% endfor %}</label>
+      <label>Nome fantasia {{ form.company_trade_name() }}</label>
+      <div class="row">
+        <label>Documento fiscal {{ form.tax_id() }}</label>
+        <label>País {{ form.country() }}</label>
+      </div>
+      <label>Fuso da empresa {{ form.company_tz() }}</label>
+      <div class="actions">
+        {{ form.submit(class_="contrast") }}
+        <a class="secondary" href="{{ url_for('web_auth.register_company_step1') }}">Voltar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

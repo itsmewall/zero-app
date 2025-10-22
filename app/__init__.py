@@ -1,38 +1,38 @@
 # app/__init__.py
+import os, pathlib
 from flask import Flask
-from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_wtf import CSRFProtect
-import os
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-csrf = CSRFProtect()
+migrate = Migrate()
 
 def create_app():
-    load_dotenv()
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///app.db")
+
+    # cfg
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret")
+
+    # use caminho absoluto para não criar db perdido em outra pasta
+    base = pathlib.Path(__file__).resolve().parent.parent
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+        "DATABASE_URL",
+        f"sqlite:///{base / 'app.db'}"
+    )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["REQUIRE_TERMS"] = True
 
     db.init_app(app)
     login_manager.init_app(app)
-    csrf.init_app(app)
-    login_manager.login_view = "web_auth.login"
 
-    # modelos precisam ser importados antes de create_all
-    from .models import User  # noqa
+    # IMPORTA OS MODELS AQUI
+    from . import models  # noqa
 
-    # rotas
-    from .routes import web_auth as web_auth_bp
-    app.register_blueprint(web_auth_bp)
+    migrate.init_app(app, db)
 
-    # cria tabelas na primeira subida
-    with app.app_context():
-        db.create_all()
-    
+    from .routes import web_auth
+    app.register_blueprint(web_auth)
+
     return app
-
-wsgi_app = create_app()
