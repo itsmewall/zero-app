@@ -1,0 +1,12 @@
+name: Clínica
+entities:
+  Task:
+    labels: { singular: "Atendimento", plural: "Atendimentos" }
+    fields:
+      - key: paciente; type: string
+      - key: procedimento; type: string
+      - key: sala; type: string
+workflows:
+  Task:
+    states: [Agendado, Em atendimento, Finalizado, Faturado]
+    initial: Agendado
