@@ -1,0 +1,31 @@
+.dashboard-head {
+  margin: .2rem 0 1rem;
+  display:flex; flex-wrap: wrap; gap:.75rem; align-items: baseline; justify-content: space-between;
+}
+.dashboard-head h2 { margin: 0; }
+.dashboard-head .company {
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.kpis { display:grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.kpi {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  padding: .9rem 1rem;
+  box-shadow: var(--shadow);
+}
+.kpi .label { color: var(--muted); font-size: .9rem; }
+.kpi .value { font-size: 1.6rem; font-weight: 700; margin-top: .2rem; }
+
+.section {
+  margin-top: 1rem;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+.section header { display:flex; justify-content: space-between; align-items:center; margin-bottom: .6rem; }
+.section header h3 { margin: 0; font-size: 1.05rem; }

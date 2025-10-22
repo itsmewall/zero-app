@@ -1,20 +1,32 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<h2>Entrar</h2>
-<form method="post" novalidate>
-  {{ form.hidden_tag() }}
+<h2>Entrar</h2><div class="page-login">
+  <div class="login-box">
+    <h2>Entrar</h2>
+    <p class="subtitle">Acesse sua conta</p><form method="post" novalidate>
+          {{ form.hidden_tag() }}
 
-  <label for="email">E-mail</label>
-  {{ form.email(id="email", placeholder="voce@exemplo.com") }}
-  {% for e in form.email.errors %}<small class="error">{{ e }}</small>{% endfor %}
+        <label for="email">E-mail</label>
+        {{ form.email(id="email", placeholder="voce@exemplo.com") }}
+        {% for e in form.email.errors %}<small class="error">{{ e }}</small>{% endfor %}
 
-  <label for="password">Senha</label>
-  {{ form.password(id="password", placeholder="sua senha") }}
-  {% for e in form.password.errors %}<small class="error">{{ e }}</small>{% endfor %}
+        <label for="password">Senha</label>
+        {{ form.password(id="password", placeholder="sua senha") }}
+        {% for e in form.password.errors %}<small class="error">{{ e }}</small>{% endfor %}
 
-  <div class="form-actions">
-    {{ form.submit(class_="contrast") }}
-    <a href="{{ url_for('web_auth.register') }}">Criar conta</a>
+        <div class="form-actions">
+            {{ form.submit(class_="contrast") }}
+            <a href="{{ url_for('web_auth.register') }}">Criar conta</a>
+        </div>
+        </form>
+    <div class="login-actions">
+      {{ form.submit(class_="contrast") }}
+      <a href="{{ url_for('web_auth.register') }}">Criar conta</a>
+    </div>
   </div>
-</form>
+</div>
 {% endblock %}

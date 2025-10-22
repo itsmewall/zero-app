@@ -1,20 +1,50 @@
 {% extends "base.html" %}
-{% block content %}
-<h2>Dashboard</h2>
-<p>Bem-vindo, {{ current_user.email }}.</p>
 
-<div class="grid">
-  <article>
-    <header><strong>Status</strong></header>
-    <p>Aplicação rodando. Aqui você coloca seus cards e atalhos.</p>
-  </article>
-  <article>
-    <header><strong>Próximos passos</strong></header>
-    <ul>
-      <li>Criar seu primeiro módulo</li>
-      <li>Adicionar CRUD básico</li>
-      <li>Conectar banco real se quiser</li>
-    </ul>
-  </article>
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-head">
+  <h2>Dashboard</h2>
+  {% if company %}
+    <div class="company">
+      Empresa: <strong>{{ company.trade_name or company.legal_name }}</strong> • plano {{ company.plan }}
+    </div>
+  {% endif %}
+</div>
+
+<div class="kpis">
+  <div class="kpi">
+    <div class="label">Usuários</div>
+    <div class="value">{{ current_user and 1 or 0 }}</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Projetos</div>
+    <div class="value">0</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Status</div>
+    <div class="value">OK</div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:1rem;">
+  <header>
+    <h3>Atalhos</h3>
+    <a href="#">Configurações</a>
+  </header>
+  <div class="grid">
+    <article class="card">
+      <header><strong>Convites</strong></header>
+      <p>Convide sua equipe para a empresa.</p>
+      <footer><a href="#">Criar convite</a></footer>
+    </article>
+    <article class="card">
+      <header><strong>Perfil</strong></header>
+      <p>Atualize seus dados pessoais.</p>
+      <footer><a href="#">Abrir perfil</a></footer>
+    </article>
+  </div>
 </div>
 {% endblock %}

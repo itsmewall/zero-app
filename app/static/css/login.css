@@ -1,0 +1,16 @@
+/* layout centralizado */
+.page-login { display:grid; place-items:center; min-height: calc(100vh - 110px); }
+.login-box {
+  width: 100%; max-width: 460px;
+  padding: 1.25rem 1.25rem 1rem;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.login-box h2 { margin: .25rem 0 1rem; }
+.login-box .subtitle { color: var(--muted); margin-top: -6px; margin-bottom: 14px; }
+
+.login-actions { display:flex; justify-content: space-between; align-items:center; gap:.75rem; margin-top:.75rem; }
+.login-actions a { color: var(--muted); }
+.login-actions a:hover { color: var(--fg); }

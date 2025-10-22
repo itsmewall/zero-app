@@ -1,9 +1,8 @@
 # app/routes.py
-import os
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from . import db, login_manager
-from .models import User
+from .models import User, Company, Membership, Invite, ROLE_CHOICES
 from .forms import RegisterForm, LoginForm
 
 web_auth = Blueprint("web_auth", __name__)
@@ -28,16 +27,48 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         email = form.email.data.strip().lower()
+
         if User.query.filter_by(email=email).first():
             flash("E-mail já cadastrado.", "warning")
             return redirect(url_for("web_auth.login"))
-        user = User(email=email)
+
+        # 1) Cria empresa
+        company = Company(
+            legal_name=form.company_legal_name.data.strip(),
+            trade_name=(form.company_trade_name.data or "").strip() or None,
+            tax_id=(form.tax_id.data or "").strip() or None,
+            country=form.country.data.strip().upper(),
+            tz=form.company_tz.data,
+            plan="free",
+        )
+        db.session.add(company)
+        db.session.flush()  # pega id
+
+        # 2) Cria usuário
+        user = User(
+            email=email,
+            first_name=form.first_name.data.strip(),
+            last_name=form.last_name.data.strip(),
+            job_title=(form.job_title.data or "").strip() or None,
+            phone=(form.phone.data or "").strip() or None,
+            tz=form.tz.data,
+            locale="pt-BR",
+        )
         user.set_password(form.password.data)
         db.session.add(user)
+        db.session.flush()
+
+        # 3) Owner da empresa
+        company.owner_user_id = user.id
+
+        # 4) Vínculo como owner
+        membership = Membership(user_id=user.id, company_id=company.id, role="owner", is_active=True)
+        db.session.add(membership)
+
         db.session.commit()
-        flash("Conta criada. Faça login.", "success")
+        flash("Conta e empresa criadas. Faça login.", "success")
         return redirect(url_for("web_auth.login"))
-    return render_template("register.html", form=form, title="Criar conta")
+    return render_template("register.html", form=form, title="Criar conta e empresa")
 
 @web_auth.route("/login", methods=["GET", "POST"])
 def login():
@@ -65,9 +96,12 @@ def logout():
 @web_auth.get("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", title="Dashboard")
+    # Descobre a empresa ativa do usuário. Aqui pegamos a primeira.
+    m = Membership.query.filter_by(user_id=current_user.id, is_active=True).first()
+    company = m.company if m else None
+    return render_template("dashboard.html", title="Dashboard", company=company)
 
-# Healthcheck simples
+# Health
 @web_auth.get("/healthz")
 def healthz():
     return "ok", 200, {"Content-Type": "text/plain"}
