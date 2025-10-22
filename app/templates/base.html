@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title or "App Zero" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul>
+      <li><a href="{{ url_for('web_auth.home') }}"><strong>App Zero</strong></a></li>
+    </ul>
+    <ul>
+      {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('web_auth.dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('web_auth.logout') }}">Sair</a></li>
+      {% else %}
+        <li><a href="{{ url_for('web_auth.login') }}">Entrar</a></li>
+        <li><a href="{{ url_for('web_auth.register') }}">Criar conta</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-wrap">
+          {% for cat, msg in messages %}
+            <div class="flash {{ cat }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

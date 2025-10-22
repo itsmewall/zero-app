@@ -1,0 +1,25 @@
+/* Paleta escura leve */
+:root { --bg:#0b0e14; --fg:#e6edf3; --muted:#9aa4ad; --brand:#3ea6ff; }
+body { background: var(--bg); color: var(--fg); }
+nav, .container { max-width: 980px; }
+a { color: var(--brand); }
+
+.hero { padding: 3rem 0; }
+.actions a + a { margin-left: .5rem; }
+
+.flash-wrap { margin: 1rem 0; }
+.flash { padding: .5rem .75rem; border-radius: 6px; }
+.flash.success { background: #0e3b22; color: #22c55e; }
+.flash.danger  { background: #3b0e0e; color: #ef4444; }
+.flash.warning { background: #3b2a0e; color: #f59e0b; }
+.flash.info    { background: #0e2a3b; color: #3ea6ff; }
+
+.error { color: #ef4444; display:block; margin:.25rem 0 .5rem; }
+
+.form-actions { display:flex; align-items:center; gap:.75rem; margin-top:.75rem; }
+
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}

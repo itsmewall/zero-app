@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Entrar</h2>
+<form method="post" novalidate>
+  {{ form.hidden_tag() }}
+
+  <label for="email">E-mail</label>
+  {{ form.email(id="email", placeholder="voce@exemplo.com") }}
+  {% for e in form.email.errors %}<small class="error">{{ e }}</small>{% endfor %}
+
+  <label for="password">Senha</label>
+  {{ form.password(id="password", placeholder="sua senha") }}
+  {% for e in form.password.errors %}<small class="error">{{ e }}</small>{% endfor %}
+
+  <div class="form-actions">
+    {{ form.submit(class_="contrast") }}
+    <a href="{{ url_for('web_auth.register') }}">Criar conta</a>
+  </div>
+</form>
+{% endblock %}

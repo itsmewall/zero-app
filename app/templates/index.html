@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Comece aqui</h1>
+  <p>Crie sua conta ou entre para acessar o dashboard.</p>
+  <div class="actions">
+    <a role="button" href="{{ url_for('web_auth.register') }}">Criar conta</a>
+    <a role="button" class="secondary" href="{{ url_for('web_auth.login') }}">Entrar</a>
+  </div>
+</section>
+{% endblock %}
